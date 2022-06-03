@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<dimen name="marginTop">24dp</dimen>
+	<dimen name="margin">24dp</dimen>
+	<dimen name="buttonSize">40dp</dimen>
+	<dimen name="buttonSizeBig">64dp</dimen>
+	<dimen name="textSize">32sp</dimen>
+</resources>
