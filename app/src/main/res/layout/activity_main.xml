@@ -17,7 +17,28 @@
 		<!--https://developer.android.com/studio/write/tool-attributes-->
 		<!--android:text="@string/text_info"-->
 		<TextView
-			android:id="@+id/textInfo"
+			android:id="@+id/textInfo1"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_marginTop="@dimen/marginTop"
+			tools:text="@string/text_info"
+			android:textSize="@dimen/textSize" />
+		<TextView
+			android:id="@+id/textInfo2"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_marginTop="@dimen/marginTop"
+			tools:text="@string/text_info"
+			android:textSize="@dimen/textSize" />
+		<TextView
+			android:id="@+id/textInfo3"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_marginTop="@dimen/marginTop"
+			tools:text="@string/text_info"
+			android:textSize="@dimen/textSize" />
+		<TextView
+			android:id="@+id/textInfo4"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
 			android:layout_marginTop="@dimen/marginTop"

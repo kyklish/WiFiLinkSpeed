@@ -25,14 +25,19 @@ class MainActivity : Activity() {
 		// OR set flag in MainActivity.kt
 //		window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
 
-		textView = findViewById(R.id.textInfo)
+//		textView = findViewById(R.id.textInfo)
 		wifiManager = applicationContext.getSystemService(WIFI_SERVICE) as WifiManager
 
-		updateDisplayByTimer()
-		updateDisplayByHandler()
+//		updateDisplayByTimer()
+//		updateDisplayByHandler()
 
 //		TODO("Add keep screen on to Workout timer app")
 //		TODO("Remove unnecessary flavour builds")
+
+		UpdateDisplay(this,wifiManager,findViewById(R.id.textInfo1),250)
+		UpdateDisplay(this,wifiManager,findViewById(R.id.textInfo2),500)
+		UpdateDisplay(this,wifiManager,findViewById(R.id.textInfo3),750)
+		UpdateDisplay(this,wifiManager,findViewById(R.id.textInfo4),1000)
 	}
 
 	override fun onStop() {
