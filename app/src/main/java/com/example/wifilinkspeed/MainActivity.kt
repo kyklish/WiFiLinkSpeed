@@ -8,7 +8,7 @@ import android.os.Bundle
 import android.os.Handler
 import android.widget.TextView
 import java.util.*
-
+import com.example.wifilinkspeed.Utils.Companion.setTextView
 
 class MainActivity : Activity() {
 
@@ -54,33 +54,35 @@ class MainActivity : Activity() {
 		val wifiInfo = wifiManager.connectionInfo
 		if (wifiInfo != null && wifiInfo.linkSpeed != -1) {
 			if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q)
-				textView.text =
+				setTextView(
+					this,
+					textView,
 					getString(
 						R.string.text_speed_tx_rx,
 						wifiInfo.txLinkSpeedMbps,
 						wifiInfo.rxLinkSpeedMbps,
 						WifiInfo.LINK_SPEED_UNITS
 					)
+				)
 			else
-//				textView.text = "" + wifiInfo.linkSpeed + WifiInfo.LINK_SPEED_UNITS
-				textView.text =
+//				setTextView(this, textView, "" + wifiInfo.linkSpeed + WifiInfo.LINK_SPEED_UNITS
+				setTextView(
+					this,
+					textView,
 					getString(
 						R.string.text_speed,
 						wifiInfo.linkSpeed,
 						WifiInfo.LINK_SPEED_UNITS
 					)
+				)
 		} else
-			textView.text = getString(R.string.text_info)
+			setTextView(this, textView, getString(R.string.text_info))
 	}
 
 	private fun updateDisplayByTimer() {
 		Timer().schedule(object : TimerTask() {
 			override fun run() {
-				runOnUiThread {
-					// Only the original thread that created a view hierarchy can touch its views.
-					// So run on the main (UI) thread.
-					showWifiLinkSpeed()
-				}
+				showWifiLinkSpeed()
 			}
 		}, 0, period)
 	}

@@ -1,6 +1,8 @@
 package com.example.wifilinkspeed
 
+import android.app.Activity
 import android.util.Log
+import android.widget.TextView
 import android.widget.Toast
 import java.text.SimpleDateFormat
 import java.util.*
@@ -8,15 +10,17 @@ import java.util.*
 class Utils {
 	companion object {
 		/**
-		 * Provides a String representation of the given time
-		 * @param seconds total amount of seconds
-		 * @return String in "HH:mm:ss" format
+		 * Set text in UI thread from any background thread.
+		 * @param activity Activity with TextView element.
+		 * @param textView TextView element.
+		 * @param text Text.
 		 */
-		fun getTimeFromSeconds(seconds: Long): String {
-			val timeZone = TimeZone.getTimeZone("UTC")
-			val dateFormatter = SimpleDateFormat("HH:mm:ss", Locale.getDefault())
-			dateFormatter.timeZone = timeZone
-			return dateFormatter.format(Date(seconds * 1000))
+		fun setTextView(activity: Activity, textView: TextView, text: String?) {
+			activity.runOnUiThread {
+				// Only the original thread that created a view hierarchy can touch its views.
+				// So run on the main (UI) thread.
+				textView.text = text
+			}
 		}
 
 		fun logd(message: String) {
