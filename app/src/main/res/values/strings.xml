@@ -3,7 +3,14 @@
 <resources>
 	<string name="app_name_debug">&app_name; Debug</string>
 	<string name="app_name_release">&app_name;</string>
+	<string name="notification_channel_id">Foreground Service ID</string>
+	<string name="notification_channel_name">Foreground Service ID</string>
+	<string name="notification_description">Notification description text</string>
+	<string name="notification_message">Service is running</string>
+	<string name="notification_ticker_text">Ticker text</string>
+	<string name="notification_title">Service enabled</string>
 	<string name="text_info">WiFi Link Speed</string>
 	<string name="text_speed">%1$d%2$s</string>
 	<string name="text_speed_tx_rx">Tx: %1$d%3$s\nRx: %2$d%3$s</string>
+	<string name="notification_sub_text">Sub text</string>
 </resources>

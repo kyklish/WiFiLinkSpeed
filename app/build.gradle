@@ -8,7 +8,7 @@ android {
 
     defaultConfig {
         applicationId "com.example.wifilinkspeed"
-        minSdkVersion 19
+        minSdkVersion 27
         targetSdkVersion 29
         versionCode 1
         versionName "1.0.0"
@@ -38,13 +38,6 @@ android {
             minSdkVersion 27
             versionCode 20000 + android.defaultConfig.versionCode
             versionNameSuffix '-minApi27-8.1.0-Oreo'
-        }
-
-        KitKat {
-            dimension 'api'
-            minSdkVersion 19
-            versionCode 10000 + android.defaultConfig.versionCode
-            versionNameSuffix '-minApi19-4.4.x-KitKat'
         }
     }
 }
