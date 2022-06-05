@@ -14,7 +14,7 @@ class MainActivity : Activity() {
 
 	private lateinit var textView: TextView
 	private lateinit var wifiManager: WifiManager
-	private val period: Long = 250
+	private val period: Long = 1000 // Android updates wifi info approximately every second
 
 	override fun onCreate(savedInstanceState: Bundle?) {
 		super.onCreate(savedInstanceState)
@@ -29,10 +29,7 @@ class MainActivity : Activity() {
 		wifiManager = applicationContext.getSystemService(WIFI_SERVICE) as WifiManager
 
 		updateDisplayByTimer()
-		updateDisplayByHandler()
-
-//		TODO("Add keep screen on to Workout timer app")
-//		TODO("Remove unnecessary flavour builds")
+//		updateDisplayByHandler()
 	}
 
 	override fun onStop() {
@@ -87,6 +84,7 @@ class MainActivity : Activity() {
 		}, 0, period)
 	}
 
+	@Suppress("unused")
 	private fun updateDisplayByHandler() {
 		// A Handler allows you to send and process Message and Runnable objects associated with a thread's MessageQueue.
 		// There are two main uses for a Handler:

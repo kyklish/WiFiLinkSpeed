@@ -7,7 +7,7 @@ android {
     buildToolsVersion "29.0.2"
 
     defaultConfig {
-        applicationId "com.example.wifi.link.speed"
+        applicationId "com.example.wifilinkspeed"
         minSdkVersion 19
         targetSdkVersion 29
         versionCode 1
@@ -20,11 +20,6 @@ android {
         debug {
             applicationIdSuffix ".debug"
             resValue "string", "app_name", "@string/app_name_debug"
-            //https://developer.android.com/studio/build/gradle-tips
-            //Constant val for rest time
-            buildConfigField "Long", "COUNTDOWN_PULL_UP", "5L" //0m:05s
-            buildConfigField "Long", "COUNTDOWN_PRESS", "3L"   //0m:03s
-            buildConfigField "Long", "COUNTDOWN_BARS", "4L"    //0m:04s
         }
         release {
             minifyEnabled true
@@ -32,10 +27,6 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
             signingConfig signingConfigs.debug
             resValue "string", "app_name", "@string/app_name_release"
-            //Constant val for rest time
-            buildConfigField "Long", "COUNTDOWN_PULL_UP", "(2 * 60) + 50L" //2m:50s
-            buildConfigField "Long", "COUNTDOWN_PRESS", "50L"              //0m:50s
-            buildConfigField "Long", "COUNTDOWN_BARS", "(1 * 60) + 50L"    //1m:50s
         }
     }
 
