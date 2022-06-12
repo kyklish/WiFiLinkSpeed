@@ -21,8 +21,15 @@
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
 			android:layout_marginTop="@dimen/marginTop"
-			tools:text="@string/text_info"
-			android:textSize="@dimen/textSize" />
+			android:textSize="@dimen/textSize"
+			tools:text="@string/text_info" />
+
+		<Button
+			android:id="@+id/buttonService"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:onClick="toggleService"
+			tools:text="Button" />
 
 	</LinearLayout>
 </ScrollView>

@@ -4,8 +4,6 @@ import android.app.Activity
 import android.util.Log
 import android.widget.TextView
 import android.widget.Toast
-import java.text.SimpleDateFormat
-import java.util.*
 
 class Utils {
 	companion object {

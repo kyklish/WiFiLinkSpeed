@@ -5,33 +5,63 @@ import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.Service
 import android.content.Intent
+import android.os.Binder
 import android.os.IBinder
-import com.example.wifilinkspeed.Utils.Companion.logd
+import java.util.*
+
+
+// Service lifecycle
+// Activity->startService() will call onStartCommand() and onDestroy()
+// Activity->bindService() will call onBind() and onUnbind() and onDestroy() but NOT onStartCommand()
 
 
 class ForegroundService : Service() {
-	private val notificationId = 1001
-	private lateinit var notificationManager : NotificationManager
+	companion object {
+		private const val NOTIFICATION_ID = 1001
+		private const val period: Long =
+			1000 // Android updates wifi info approximately every second
+	}
 
-	override fun onBind(intent: Intent?): IBinder? {
-		return null
+	private lateinit var wifiInfo: WiFiInfo
+	private lateinit var notificationManager: NotificationManager
+	private var timer: Timer? = null
+	private var callbackUpdateActivityText: ((String) -> Unit)? = null
+
+	// this class will be given to the client when the service is bound
+	// client can get a reference to the service through it
+	class MyBinder(val service: ForegroundService) : Binder()
+
+	// this is the object that receives interactions from clients.
+	private val binder = MyBinder(this)
+
+	private fun initializeService() {
+		wifiInfo = WiFiInfo(this)
+		notificationManager = getSystemService(NOTIFICATION_SERVICE) as NotificationManager
+		createNotificationChannel()
+		val notification = createNotification(getString(R.string.notification_message))
+		// make service alive forever
+		startForeground(NOTIFICATION_ID, notification)
+		// start main work
+		updateNotificationByTimer()
+	}
+
+	override fun onBind(intent: Intent?): IBinder? = binder
+
+	override fun onUnbind(intent: Intent?): Boolean {
+		callbackUpdateActivityText = null
+		return super.onUnbind(intent)
 	}
 
 	override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-		Thread {
-			while (true) {
-				logd("Service is running...")
-				Thread.sleep(2000)
-			}
-		}.start()
-
-		notificationManager = getSystemService(NOTIFICATION_SERVICE) as NotificationManager
-		createNotificationChannel()
-//		val notification = createNotification("text")
-		val notification = createNotification(getString(R.string.notification_message))
-		startForeground(notificationId, notification)
-
+		initializeService()
 		return super.onStartCommand(intent, flags, startId)
+	}
+
+	override fun onDestroy() {
+		timer?.cancel()
+		timer = null
+		stopForeground(true)
+		super.onDestroy()
 	}
 
 	private fun createNotificationChannel() {
@@ -42,7 +72,6 @@ class ForegroundService : Service() {
 //			NotificationManager.IMPORTANCE_MIN // No sound and does not appear in the status bar
 		).apply {
 			description = getString(R.string.notification_description)
-			setShowBadge(false) // Notification dot on app icon
 		}
 
 		notificationManager.createNotificationChannel(channel)
@@ -53,19 +82,43 @@ class ForegroundService : Service() {
 			.setSmallIcon(R.drawable.ic_wifi_small_icon)
 //			.setContentTitle(getString(R.string.notification_title))
 			.setContentText(message)
-			.setSubText(getString(R.string.notification_sub_text))
+//			.setSubText(getString(R.string.notification_sub_text))
 //			.setTicker(getString(R.string.notification_ticker_text))
 			// On lock screen shows the notification's full content
 			.setVisibility(Notification.VISIBILITY_PUBLIC)
 			.build()
 	}
 
-	fun notify(message: String) {
-		notificationManager.notify(notificationId, createNotification(message))
+	private fun updateNotificationByTimer() {
+/*		if (BuildConfig.DEBUG) {
+			// Look at timer below, if we did not stop this thread or timer in onDestroy() service
+			// will be immortal. It will not stop at all if we call stopService() from activity.
+			// Thread or timer will keep service alive.
+			// IMPORTANT: always delete created threads and timers.
+			Thread {
+				while (true) {
+					logd("ForegroundService running...")
+					Thread.sleep(10000)
+				}
+			}.start()
+		}*/
+
+		timer = Timer().apply {
+			schedule(object : TimerTask() {
+				override fun run() {
+					val linkSpeedStr = wifiInfo.linkSpeedStr(this@ForegroundService)
+					callbackUpdateActivityText?.invoke(linkSpeedStr)
+					notify(linkSpeedStr)
+				}
+			}, 0, period)
+		}
 	}
 
-	override fun onDestroy() {
-		logd("Service is destroyed.")
-		super.onDestroy()
+	private fun notify(message: String) {
+		notificationManager.notify(NOTIFICATION_ID, createNotification(message))
+	}
+
+	fun registerCallbackForResults(callback: (String) -> Unit) {
+		callbackUpdateActivityText = callback
 	}
 }
