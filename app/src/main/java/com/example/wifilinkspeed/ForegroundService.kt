@@ -6,6 +6,7 @@ import android.app.NotificationManager
 import android.app.Service
 import android.content.Intent
 import android.os.Binder
+import android.os.Handler
 import android.os.IBinder
 import java.util.*
 
@@ -25,6 +26,8 @@ class ForegroundService : Service() {
 	private lateinit var wifiInfo: WiFiInfo
 	private lateinit var notificationManager: NotificationManager
 	private var timer: Timer? = null
+	private var handler: Handler? = null
+	private var handlerTask: Runnable? = null
 	private var callbackUpdateActivityText: ((String) -> Unit)? = null
 
 	// this class will be given to the client when the service is bound
@@ -42,7 +45,8 @@ class ForegroundService : Service() {
 		// make service alive forever
 		startForeground(NOTIFICATION_ID, notification)
 		// start main work
-		updateNotificationByTimer()
+//		updateNotificationByTimer() // works fine, no problems
+		updateNotificationByHandler() // more reliable by StackOverflow
 	}
 
 	override fun onBind(intent: Intent?): IBinder? = binder
@@ -60,6 +64,13 @@ class ForegroundService : Service() {
 	override fun onDestroy() {
 		timer?.cancel()
 		timer = null
+
+		handlerTask?.let {
+			handler?.removeCallbacks(it)
+		}
+		handlerTask = null
+		handler = null
+
 		stopForeground(true)
 		super.onDestroy()
 	}
@@ -89,6 +100,7 @@ class ForegroundService : Service() {
 			.build()
 	}
 
+	@Suppress("unused")
 	private fun updateNotificationByTimer() {
 /*		if (BuildConfig.DEBUG) {
 			// Look at timer below, if we did not stop this thread or timer in onDestroy() service
@@ -111,6 +123,26 @@ class ForegroundService : Service() {
 					notify(linkSpeedStr)
 				}
 			}, 0, period)
+		}
+	}
+
+	@Suppress("unused")
+	private fun updateNotificationByHandler() {
+		// A Handler allows you to send and process Message and Runnable objects associated with a thread's MessageQueue.
+		// There are two main uses for a Handler:
+		// (1) to schedule messages and runnables to be executed at some point in the future;
+		// (2) to enqueue an action to be performed on a different thread than your own.
+		handler = Handler()
+		handlerTask = object : Runnable {
+			override fun run() {
+				val linkSpeedStr = wifiInfo.linkSpeedStr(this@ForegroundService)
+				callbackUpdateActivityText?.invoke(linkSpeedStr)
+				notify(linkSpeedStr)
+				handler?.postDelayed(this, period)
+			}
+		}
+		handlerTask?.let {
+			handler?.post(it)
 		}
 	}
 
