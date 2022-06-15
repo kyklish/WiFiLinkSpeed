@@ -3,6 +3,8 @@ package com.example.wifilinkspeed
 import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
+import android.app.PendingIntent.FLAG_UPDATE_CURRENT
+import android.app.PendingIntent.getActivity
 import android.app.Service
 import android.content.Intent
 import android.os.Binder
@@ -18,6 +20,7 @@ import java.util.*
 
 class ForegroundService : Service() {
 	companion object {
+		private const val REQUEST_CODE = 0
 		private const val NOTIFICATION_ID = 1001
 		private const val PERIOD: Long =
 			1000 // Android updates wifi info approximately every second
@@ -89,6 +92,14 @@ class ForegroundService : Service() {
 	}
 
 	private fun createNotification(message: String): Notification {
+		val contentIntent = Intent(applicationContext, MainActivity::class.java)
+		val contentPendingIntent = getActivity(
+			applicationContext,
+			REQUEST_CODE,
+			contentIntent,
+			FLAG_UPDATE_CURRENT
+		)
+
 		return Notification.Builder(this, getString(R.string.notification_channel_id))
 			.setSmallIcon(R.drawable.ic_wifi_small_icon)
 //			.setContentTitle(getString(R.string.notification_title))
@@ -97,6 +108,7 @@ class ForegroundService : Service() {
 //			.setTicker(getString(R.string.notification_ticker_text))
 			// On lock screen shows the notification's full content
 			.setVisibility(Notification.VISIBILITY_PUBLIC)
+			.setContentIntent(contentPendingIntent)
 			.build()
 	}
 
