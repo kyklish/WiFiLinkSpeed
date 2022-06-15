@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:tools="http://schemas.android.com/tools"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent"
+	android:orientation="vertical">
+
+	<!--[android:layout_width="wrap_content"] make overlay window change size on every text update
+	it become smaller on several pixel and then become bigger to wrap content. Fix this by match
+	parent view. We set parent view to wrap content of this layout, so result will be minimal
+	window size which wraps this 'text' content.-->
+	<TextView
+		android:id="@+id/textOverlay"
+		android:layout_width="match_parent"
+		android:layout_height="match_parent"
+		android:fontFamily="serif-monospace"
+		android:textStyle="bold"
+		tools:text="433Mbps Tx\n54Mbps Rx" />
+</LinearLayout>

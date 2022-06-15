@@ -1,13 +1,18 @@
 package com.example.wifilinkspeed
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.ActivityManager
+import android.app.AlertDialog
 import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
 import android.content.ServiceConnection
+import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.os.IBinder
+import android.provider.Settings
 import android.view.View
 import android.widget.Button
 import android.widget.TextView
@@ -15,6 +20,10 @@ import com.example.wifilinkspeed.Utils.Companion.setTextView
 
 
 class MainActivity : Activity() {
+	companion object {
+		const val GET_PERMISSION_OVERLAY_REQUEST = 0
+	}
+
 	private lateinit var textView: TextView
 	private lateinit var buttonView: Button
 
@@ -47,8 +56,7 @@ class MainActivity : Activity() {
 		setButtonServiceText()
 	}
 
-/*
-	Official Android documentation.
+/*	Official Android documentation.
 
 	If you need to interact with the service only while your activity is visible, you should bind
 	during onStart() and unbind during onStop().
@@ -71,8 +79,8 @@ class MainActivity : Activity() {
 	However, if you choose to implement the onStartCommand() callback method, then you must explicitly
 	stop the service, because the service is now considered to be started. In this case, the service
 	runs until the service stops itself with stopSelf() or another component calls stopService(),
-	regardless of whether it is bound to any clients.
-*/
+	regardless of whether it is bound to any clients. */
+
 	override fun onStart() {
 		super.onStart()
 		startForegroundServiceAndBind(buttonView)
@@ -130,6 +138,11 @@ class MainActivity : Activity() {
 		causes the client to unbind.
 	*/
 	private fun startForegroundServiceAndBind(buttonView: Button? = null) {
+		if (!canDrawOverlays()) {
+			requestOverlayDisplayPermission()
+			return
+		}
+
 		if (!foregroundServiceRunning()) {
 			buttonView?.text = getString(R.string.button_service_stop)
 			// startForegroundService() will trigger onStartCommand() in service.
@@ -181,5 +194,32 @@ class MainActivity : Activity() {
 
 	private fun setTextInfoFromService(text: String) {
 		setTextView(this, textView, text)
+	}
+
+	@SuppressLint("ObsoleteSdkInt")
+	private fun canDrawOverlays(): Boolean {
+		// Android Version is lesser than Marshmallow (API 23)
+		// doesn't need 'Display over other apps' permission enabling.
+		if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M)
+			return true
+		return Settings.canDrawOverlays(this)
+	}
+
+	private fun requestOverlayDisplayPermission() {
+		val dialog = AlertDialog.Builder(this)
+			// This dialog can be closed, just by taping outside the dialog-box
+			.setCancelable(true) // ?
+			.setTitle(getString(R.string.alert_dialog_title))
+			.setMessage(getString(R.string.alert_dialog_message))
+			.setPositiveButton(getString(R.string.alert_dialog_positive_button)) { _, _ ->
+				val intent =
+					Intent(
+						Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
+						Uri.parse("package:$packageName")
+					)
+				startActivityForResult(intent, GET_PERMISSION_OVERLAY_REQUEST)
+			}
+			.create()
+		dialog.show()
 	}
 }
