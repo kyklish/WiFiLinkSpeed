@@ -19,7 +19,7 @@ import java.util.*
 class ForegroundService : Service() {
 	companion object {
 		private const val NOTIFICATION_ID = 1001
-		private const val period: Long =
+		private const val PERIOD: Long =
 			1000 // Android updates wifi info approximately every second
 	}
 
@@ -122,7 +122,7 @@ class ForegroundService : Service() {
 					callbackUpdateActivityText?.invoke(linkSpeedStr)
 					notify(linkSpeedStr)
 				}
-			}, 0, period)
+			}, 0, PERIOD)
 		}
 	}
 
@@ -138,7 +138,7 @@ class ForegroundService : Service() {
 				val linkSpeedStr = wifiInfo.linkSpeedStr(this@ForegroundService)
 				callbackUpdateActivityText?.invoke(linkSpeedStr)
 				notify(linkSpeedStr)
-				handler?.postDelayed(this, period)
+				handler?.postDelayed(this, PERIOD)
 			}
 		}
 		handlerTask?.let {
