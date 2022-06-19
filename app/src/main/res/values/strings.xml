@@ -9,8 +9,8 @@
 	<string name="button_service_start">Start Service</string>
 	<string name="button_service_stop">Stop Service</string>
 	<string name="notification_channel_id">Foreground Service ID</string>
-	<string name="notification_channel_name">Foreground Service ID</string>
-	<string name="notification_description">Notification description text</string>
+	<string name="notification_channel_name">Foreground Service Notification</string>
+	<string name="notification_description">Show notification to make permanent foreground service.</string>
 	<string name="notification_message">Service is running</string>
 	<string name="notification_sub_text">Sub text</string>
 	<string name="notification_ticker_text">Ticker text</string>
