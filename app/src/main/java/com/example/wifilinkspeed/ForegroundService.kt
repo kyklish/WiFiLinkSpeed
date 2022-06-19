@@ -7,6 +7,7 @@ import android.app.PendingIntent.FLAG_UPDATE_CURRENT
 import android.app.PendingIntent.getActivity
 import android.app.Service
 import android.content.Intent
+import android.graphics.Color
 import android.os.Binder
 import android.os.Handler
 import android.os.IBinder
@@ -22,8 +23,8 @@ class ForegroundService : Service() {
 	companion object {
 		private const val REQUEST_CODE = 0
 		private const val NOTIFICATION_ID = 1001
-		private const val PERIOD: Long =
-			1000 // Android updates wifi info approximately every second
+		// Android updates wifi info approximately every second
+		private const val PERIOD: Long = 1000
 	}
 
 	private lateinit var wifiInfo: WiFiInfo
@@ -32,6 +33,12 @@ class ForegroundService : Service() {
 	private var handler: Handler? = null
 	private var handlerTask: Runnable? = null
 	private var callbackUpdateActivityText: ((String) -> Unit)? = null
+
+	// Debug simultaneously two variants of overlay window
+	private var overlayWindowD: OverlayWindow? = null
+	private var overlayWindowL: OverlayWindow? = null
+	// Release only one variant
+	private var overlayWindow: OverlayWindow? = null
 
 	// this class will be given to the client when the service is bound
 	// client can get a reference to the service through it
@@ -48,20 +55,19 @@ class ForegroundService : Service() {
 		// make service alive forever
 		startForeground(NOTIFICATION_ID, notification)
 		// start main work
-//		updateNotificationByTimer() // works fine, no problems
-		updateNotificationByHandler() // more reliable by StackOverflow
+//		updateUIbyTimer() // works fine, no problems
+		updateUIbyHandler() // more reliable by StackOverflow
 	}
 
-	override fun onBind(intent: Intent?): IBinder? = binder
-
-	override fun onUnbind(intent: Intent?): Boolean {
-		callbackUpdateActivityText = null
-		return super.onUnbind(intent)
-	}
-
-	override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-		initializeService()
-		return super.onStartCommand(intent, flags, startId)
+	override fun onCreate() {
+		super.onCreate()
+		if (BuildConfig.DEBUG) {
+			overlayWindowD = OverlayWindowByDraw(this, 48F, Color.RED).create()
+			overlayWindowL = OverlayWindowByLayout(this, 48F, Color.MAGENTA).create()
+		} else {
+//			overlayWindow = OverlayWindowByDraw(this, 10F, Color.YELLOW).create()
+			overlayWindow = OverlayWindowByLayout(this, 10F, Color.YELLOW).create()
+		}
 	}
 
 	override fun onDestroy() {
@@ -74,8 +80,24 @@ class ForegroundService : Service() {
 		handlerTask = null
 		handler = null
 
+		overlayWindowD?.remove()
+		overlayWindowL?.remove()
+		overlayWindow?.remove()
+
 		stopForeground(true)
 		super.onDestroy()
+	}
+
+	override fun onBind(intent: Intent?): IBinder? = binder
+
+	override fun onUnbind(intent: Intent?): Boolean {
+		callbackUpdateActivityText = null
+		return super.onUnbind(intent)
+	}
+
+	override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
+		initializeService()
+		return super.onStartCommand(intent, flags, startId)
 	}
 
 	private fun createNotificationChannel() {
@@ -109,11 +131,13 @@ class ForegroundService : Service() {
 			// On lock screen shows the notification's full content
 			.setVisibility(Notification.VISIBILITY_PUBLIC)
 			.setContentIntent(contentPendingIntent)
+			// if launch activity from notification not work read this:
+			// "android - How To Start An Activity From Background in Android 10 (READ LAST COMMENT deep linking) - Stack Overflow.rar"
 			.build()
 	}
 
 	@Suppress("unused")
-	private fun updateNotificationByTimer() {
+	private fun updateUIbyTimer() {
 /*		if (BuildConfig.DEBUG) {
 			// Look at timer below, if we did not stop this thread or timer in onDestroy() service
 			// will be immortal. It will not stop at all if we call stopService() from activity.
@@ -130,16 +154,14 @@ class ForegroundService : Service() {
 		timer = Timer().apply {
 			schedule(object : TimerTask() {
 				override fun run() {
-					val linkSpeedStr = wifiInfo.linkSpeedStr(this@ForegroundService)
-					callbackUpdateActivityText?.invoke(linkSpeedStr)
-					notify(linkSpeedStr)
+					updateUI()
 				}
 			}, 0, PERIOD)
 		}
 	}
 
 	@Suppress("unused")
-	private fun updateNotificationByHandler() {
+	private fun updateUIbyHandler() {
 		// A Handler allows you to send and process Message and Runnable objects associated with a thread's MessageQueue.
 		// There are two main uses for a Handler:
 		// (1) to schedule messages and runnables to be executed at some point in the future;
@@ -147,15 +169,22 @@ class ForegroundService : Service() {
 		handler = Handler()
 		handlerTask = object : Runnable {
 			override fun run() {
-				val linkSpeedStr = wifiInfo.linkSpeedStr(this@ForegroundService)
-				callbackUpdateActivityText?.invoke(linkSpeedStr)
-				notify(linkSpeedStr)
+				updateUI()
 				handler?.postDelayed(this, PERIOD)
 			}
 		}
 		handlerTask?.let {
 			handler?.post(it)
 		}
+	}
+
+	private fun updateUI() {
+		val linkSpeedStr = wifiInfo.linkSpeedStr(this@ForegroundService)
+		callbackUpdateActivityText?.invoke(linkSpeedStr) // MainActivity
+		notify(linkSpeedStr) // Notification
+		overlayWindowD?.setText(linkSpeedStr) // OverlayWindow Debug
+		overlayWindowL?.setText(linkSpeedStr) // OverlayWindow Debug
+		overlayWindow?.setText(linkSpeedStr) // OverlayWindow Release
 	}
 
 	private fun notify(message: String) {

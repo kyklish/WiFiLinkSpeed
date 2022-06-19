@@ -1,10 +1,12 @@
 package com.example.wifilinkspeed
 
 import android.app.Activity
+import android.content.res.Resources
 import android.util.Log
 import android.widget.TextView
 import android.widget.Toast
 
+@Suppress("unused")
 class Utils {
 	companion object {
 		/**
@@ -19,6 +21,16 @@ class Utils {
 				// So run on the main (UI) thread.
 				textView.text = text
 			}
+		}
+
+		/**
+		 * Convert font size from sp to px.
+		 * @param resources System resources used to get scaleDensity.
+		 * @param sizeSp Font size in sp units.
+		 * @return Return font size in px units.
+		 */
+		fun spToPx(resources: Resources, sizeSp: Float): Float {
+			return sizeSp * resources.displayMetrics.scaledDensity
 		}
 
 		fun logd(message: String) {
