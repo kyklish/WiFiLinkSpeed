@@ -7,8 +7,9 @@
 
 	<!--[android:layout_width="wrap_content"] make overlay window change size on every text update
 	it become smaller on several pixel and then become bigger to wrap content. Fix this by match
-	parent view. We set parent view to wrap content of this layout, so result will be minimal
-	window size which wraps this 'text' content.-->
+	parent view. Set parent view to wrap content of this layout, so result will be minimal window
+	size which wraps this 'text' content. Or make parent view wider (screen width for example) with
+	fixed width to eliminate any layout and view size changes on runtime.-->
 	<TextView
 		android:id="@+id/textOverlay"
 		android:layout_width="match_parent"
