@@ -23,6 +23,7 @@ class ForegroundService : Service() {
 	companion object {
 		private const val REQUEST_CODE = 0
 		private const val NOTIFICATION_ID = 1001
+
 		// Android updates wifi info approximately every second
 		private const val PERIOD: Long = 1000
 	}
@@ -37,6 +38,7 @@ class ForegroundService : Service() {
 	// Debug simultaneously two variants of overlay window
 	private var overlayWindowD: OverlayWindow? = null
 	private var overlayWindowL: OverlayWindow? = null
+
 	// Release only one variant
 	private var overlayWindow: OverlayWindow? = null
 
@@ -130,9 +132,9 @@ class ForegroundService : Service() {
 //			.setTicker(getString(R.string.notification_ticker_text))
 			// On lock screen shows the notification's full content
 			.setVisibility(Notification.VISIBILITY_PUBLIC)
-			.setContentIntent(contentPendingIntent)
 			// if launch activity from notification not work read this:
 			// "android - How To Start An Activity From Background in Android 10 (READ LAST COMMENT deep linking) - Stack Overflow.rar"
+			.setContentIntent(contentPendingIntent)
 			.build()
 	}
 
