@@ -30,6 +30,7 @@ class ForegroundService : Service() {
 
 	private lateinit var wifiInfo: WiFiInfo
 	private lateinit var notificationManager: NotificationManager
+	private lateinit var notificationBuilder: Notification.Builder
 	private var timer: Timer? = null
 	private var handler: Handler? = null
 	private var handlerTask: Runnable? = null
@@ -53,6 +54,8 @@ class ForegroundService : Service() {
 		wifiInfo = WiFiInfo(this)
 		notificationManager = getSystemService(NOTIFICATION_SERVICE) as NotificationManager
 		createNotificationChannel()
+		notificationBuilder =
+			Notification.Builder(this, getString(R.string.notification_channel_id))
 		val notification = createNotification(getString(R.string.notification_message))
 		// make service alive forever
 		startForeground(NOTIFICATION_ID, notification)
@@ -126,7 +129,7 @@ class ForegroundService : Service() {
 			FLAG_UPDATE_CURRENT
 		)
 
-		return Notification.Builder(this, getString(R.string.notification_channel_id))
+		return notificationBuilder
 			.setSmallIcon(R.drawable.ic_wifi_small_icon)
 //			.setContentTitle(getString(R.string.notification_title))
 			.setContentText(message)
@@ -192,7 +195,8 @@ class ForegroundService : Service() {
 	}
 
 	private fun notify(message: String) {
-		notificationManager.notify(NOTIFICATION_ID, createNotification(message))
+		notificationBuilder.setContentText(message)
+		notificationManager.notify(NOTIFICATION_ID, notificationBuilder.build())
 	}
 
 	fun registerCallbackForResults(callback: (String) -> Unit) {
