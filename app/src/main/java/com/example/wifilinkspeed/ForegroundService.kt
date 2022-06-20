@@ -22,7 +22,7 @@ import java.util.*
 class ForegroundService : Service() {
 	companion object {
 		private const val REQUEST_CODE = 0
-		private const val NOTIFICATION_ID = 1001
+		private const val NOTIFICATION_ID = 1001 // must not be 0
 
 		// Android updates wifi info approximately every second
 		private const val PERIOD: Long = 1000
@@ -86,6 +86,8 @@ class ForegroundService : Service() {
 		overlayWindowL?.remove()
 		overlayWindow?.remove()
 
+		// if flag set to true, notification previously provided to startForeground(int, Notification)
+		// will be removed automatically
 		stopForeground(true)
 		super.onDestroy()
 	}

@@ -88,6 +88,8 @@ class OverlayWindowByLayout(context: Context, fontSizeSp: Float, fontColor: Int)
 	override fun setText(text: String) {
 		if (isTextChanged(text)) {
 			textView.text = text
+			// Android views automatically call invalidate() when their properties change,
+			// such as the background color or the text in a TextView.
 //			view.invalidate()
 		}
 	}
@@ -116,6 +118,10 @@ class OverlayWindowByDraw(context: Context, fontSizeSp: Float, fontColor: Int) :
 			(view as OverlayView).textSecondLine = textList.getOrElse(1) { "" }
 			// Custom view must call invalidate() to get know Android, that data is updated and we need
 			// redraw our custom view (Android will call onDraw() method of our custom view).
+			// https://developer.android.com/guide/topics/graphics/hardware-accel
+			// Hardware acceleration enabled by default. Once a view is rendered into a hardware
+			// layer (into hardware texture), its drawing code does not have to be executed until
+			// the view calls invalidate().
 			view.invalidate()
 		}
 	}
