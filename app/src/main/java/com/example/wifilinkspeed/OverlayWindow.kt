@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.app.Service
 import android.content.Context
 import android.graphics.*
+import android.os.Build
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
@@ -107,8 +108,8 @@ class OverlayWindowByDraw(context: Context, fontSizeSp: Float, fontColor: Int) :
 			Utils.spToPx(context.resources, fontSizeSp),
 			fontColor
 		)
-		// TODO: remove override default params.y for window
-		mLayoutParams.y = context.resources.displayMetrics.heightPixels / 2
+		if (BuildConfig.DEBUG)
+			mLayoutParams.y = context.resources.displayMetrics.heightPixels / 2
 	}
 
 	override fun setText(text: String) {
