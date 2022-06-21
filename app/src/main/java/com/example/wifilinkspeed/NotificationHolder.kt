@@ -68,6 +68,7 @@ class NotificationHolder(
 			.build()
 	}
 
+	// called, when 'message' text is changed (different than already in notification)
 	fun notify(message: String) {
 		notificationBuilder.setContentText(message)
 		notificationManager.notify(NOTIFICATION_ID, notificationBuilder.build())

@@ -55,6 +55,7 @@ abstract class OverlayWindowBase(context: Context, fontSizeSp: Float) : OverlayW
 		windowManager.removeView(view)
 	}
 
+	// we already test message text on changes in ForegroundService@updateUI(), leave here too for safety
 	protected fun isTextChanged(text: String): Boolean {
 		return if (textPrev == text)
 			false

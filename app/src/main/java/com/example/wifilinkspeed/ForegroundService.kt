@@ -28,6 +28,7 @@ class ForegroundService : Service() {
 	private var handler: Handler? = null
 	private var handlerTask: Runnable? = null
 	private var callbackUpdateActivityText: ((String) -> Unit)? = null
+	private var textPrev: String = ""
 
 	// Debug simultaneously two variants of overlay window
 	private var overlayWindowD: OverlayWindow? = null
@@ -139,16 +140,35 @@ class ForegroundService : Service() {
 		}
 	}
 
-	private fun updateUI() {
+	private fun updateUI(forceUpdate: Boolean = false) {
 		val linkSpeedStr = wifiInfo.linkSpeedStr(this@ForegroundService)
-		callbackUpdateActivityText?.invoke(linkSpeedStr) // MainActivity
-		notificationHolder.notify(linkSpeedStr) // Notification
-		overlayWindowD?.setText(linkSpeedStr) // OverlayWindow Debug
-		overlayWindowL?.setText(linkSpeedStr) // OverlayWindow Debug
-		overlayWindow?.setText(linkSpeedStr) // OverlayWindow Release
+		// Timer or handler invoke 'updateUI()' before activity set 'callbackUpdateActivityText'.
+		// On first call 'callbackUpdateActivityText?.invoke()' is null and not invoked,
+		// notification and overlay updated.
+		// On second call 'callbackUpdateActivityText' is bound to activity method, but if we got
+		// same text to output 'isTextChanged()' method returns 'false' and text in activity not
+		// updated.
+		// To fix this algorithm problem, force update activity text.
+		if (isTextChanged(linkSpeedStr) or forceUpdate) {
+			callbackUpdateActivityText?.invoke(linkSpeedStr) // MainActivity
+			notificationHolder.notify(linkSpeedStr) // Notification
+			overlayWindowD?.setText(linkSpeedStr) // OverlayWindow Debug
+			overlayWindowL?.setText(linkSpeedStr) // OverlayWindow Debug
+			overlayWindow?.setText(linkSpeedStr) // OverlayWindow Release
+		}
 	}
 
 	fun registerCallbackForResults(callback: (String) -> Unit) {
 		callbackUpdateActivityText = callback
+		updateUI(true)
+	}
+
+	private fun isTextChanged(text: String): Boolean {
+		return if (textPrev == text)
+			false
+		else {
+			textPrev = text
+			true
+		}
 	}
 }
