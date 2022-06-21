@@ -84,6 +84,8 @@ class OverlayWindowByLayout(context: Context, fontSizeSp: Float, fontColor: Int)
 			if (BuildConfig.DEBUG)
 				setBackgroundColor(Color.GRAY)
 		}
+		if (BuildConfig.DEBUG)
+			mLayoutParams.y = context.resources.displayMetrics.heightPixels / 4
 	}
 
 	override fun setText(text: String) {
