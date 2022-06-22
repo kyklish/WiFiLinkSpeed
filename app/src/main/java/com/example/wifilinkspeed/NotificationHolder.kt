@@ -37,10 +37,13 @@ class NotificationHolder(
 		val channel = NotificationChannel(
 			getString(R.string.notification_channel_id),
 			getString(R.string.notification_channel_name),
-			NotificationManager.IMPORTANCE_LOW // No sound
-//			NotificationManager.IMPORTANCE_MIN // No sound and does not appear in the status bar
+//			NotificationManager.IMPORTANCE_HIGH // Sound, pop on screen
+			NotificationManager.IMPORTANCE_DEFAULT // Sound
+//			NotificationManager.IMPORTANCE_LOW // No sound
+//			NotificationManager.IMPORTANCE_MIN // No sound, compact, not appear in status bar
 		).apply {
 			description = getString(R.string.notification_description)
+			setSound(null, null) // disable any sound from notification
 		}
 
 		notificationManager.createNotificationChannel(channel)
