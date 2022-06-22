@@ -96,7 +96,8 @@ class NotificationHolder(
 		val statusBarHeight =
 			kotlin.math.ceil(
 				(if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) 24 else 25)
-					* context.resources.displayMetrics.density)
+						* context.resources.displayMetrics.density
+			)
 		var xDrawText = 0F
 		val size = statusBarHeight // size of square bitmap (future small icon for notification)
 		val paint = Paint()
