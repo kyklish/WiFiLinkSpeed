@@ -3,8 +3,8 @@ package com.example.wifilinkspeed
 import android.annotation.SuppressLint
 import android.app.Service
 import android.content.Context
-import android.graphics.*
-import android.os.Build
+import android.graphics.Color
+import android.graphics.PixelFormat
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
@@ -40,8 +40,9 @@ abstract class OverlayWindowBase(context: Context, fontSizeSp: Float) : OverlayW
 	).apply {
 		gravity = Gravity.END or Gravity.TOP
 		width = windowWidth
-		// TODO: '+ 15' is for padding above and under text, don't know how to calculate value
-		height = Utils.spToPx(context.resources, fontSizeSp).toInt() * 2 + 30
+		// '* 1.2' is for padding above and under text, don't know how to calculate value
+		// multiply by 2 for two lines of text
+		height = (Utils.spToPx(context.resources, fontSizeSp) * 1.2).toInt() * 2
 	}
 	private var textPrev: String = ""
 
