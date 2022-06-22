@@ -17,6 +17,7 @@ class WiFiInfo(context: Context) {
 				"4Mbps Tx\n4Mbps Rx",
 				"40Mbps Tx\n4Mbps Rx",
 				"40Mbps Tx\n400Mbps Rx",
+				"1234\n5678",
 				"Debug Long String\n"
 			)
 			val strText = text[i++]

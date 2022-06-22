@@ -58,8 +58,8 @@ class ForegroundService : Service() {
 	override fun onCreate() {
 		super.onCreate()
 		if (BuildConfig.DEBUG) {
-			overlayWindowD = OverlayWindowByDraw(this, 48F, Color.RED).create()
-			overlayWindowL = OverlayWindowByLayout(this, 48F, Color.MAGENTA).create()
+			overlayWindowD = OverlayWindowByDraw(this, 40F, Color.RED).create()
+			overlayWindowL = OverlayWindowByLayout(this, 40F, Color.MAGENTA).create()
 		} else {
 //			overlayWindow = OverlayWindowByDraw(this, 10F, Color.YELLOW).create()
 			overlayWindow = OverlayWindowByLayout(this, 10F, Color.YELLOW).create()
