@@ -1,4 +1,4 @@
-package com.example.wifilinkspeed
+package io.github.kyklish.wifilinkspeed
 
 import android.annotation.SuppressLint
 import android.app.Activity
@@ -16,7 +16,7 @@ import android.provider.Settings
 import android.view.View
 import android.widget.Button
 import android.widget.TextView
-import com.example.wifilinkspeed.Utils.Companion.setTextView
+import io.github.kyklish.wifilinkspeed.Utils.Companion.setTextView
 
 
 class MainActivity : Activity() {

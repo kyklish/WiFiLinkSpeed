@@ -1,4 +1,4 @@
-package com.example.wifilinkspeed
+package io.github.kyklish.wifilinkspeed
 
 import android.annotation.SuppressLint
 import android.app.Service

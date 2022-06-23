@@ -7,7 +7,7 @@ android {
     buildToolsVersion "29.0.2"
 
     defaultConfig {
-        applicationId "com.example.wifilinkspeed"
+        applicationId "io.github.kyklish.wifilinkspeed"
         minSdkVersion 27
         targetSdkVersion 29
         versionCode 1

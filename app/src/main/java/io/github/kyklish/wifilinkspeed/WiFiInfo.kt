@@ -1,4 +1,4 @@
-package com.example.wifilinkspeed
+package io.github.kyklish.wifilinkspeed
 
 import android.app.Activity
 import android.content.Context
