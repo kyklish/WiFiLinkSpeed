@@ -208,7 +208,6 @@ class MainActivity : Activity() {
 	private fun requestOverlayDisplayPermission() {
 		val dialog = AlertDialog.Builder(this)
 			// This dialog can be closed, just by taping outside the dialog-box
-			.setCancelable(true) // ?
 			.setTitle(getString(R.string.alert_dialog_title))
 			.setMessage(getString(R.string.alert_dialog_message))
 			.setPositiveButton(getString(R.string.alert_dialog_positive_button)) { _, _ ->
