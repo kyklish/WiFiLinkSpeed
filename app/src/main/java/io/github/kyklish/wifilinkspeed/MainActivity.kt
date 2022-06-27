@@ -51,7 +51,7 @@ class MainActivity : Activity() {
 //		window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
 
 		textView = findViewById(R.id.textInfo)
-		textView.text = getString(R.string.text_info)
+		setDefaultInfoText()
 		buttonView = findViewById(R.id.buttonService)
 		setButtonServiceText()
 	}
@@ -161,7 +161,7 @@ class MainActivity : Activity() {
 	private fun stopForegroundServiceAndUnbind(buttonView: Button? = null) {
 		if (foregroundServiceRunning()) {
 			buttonView?.text = getString(R.string.button_service_start)
-			textView.text = getString(R.string.text_info)
+			setDefaultInfoText()
 			unbindForegroundService()
 			stopService(Intent(this, ForegroundService::class.java))
 		}
@@ -182,6 +182,10 @@ class MainActivity : Activity() {
 		} else {
 			startForegroundServiceAndBind(button as Button)
 		}
+	}
+
+	private fun setDefaultInfoText() {
+		textView.text = getString(R.string.text_info)
 	}
 
 	private fun setButtonServiceText() {
