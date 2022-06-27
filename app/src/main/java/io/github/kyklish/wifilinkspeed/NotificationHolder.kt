@@ -120,8 +120,16 @@ class NotificationHolder(
 			xDrawText = size
 
 		val textList = text.split('\n')
-		val textFirstLine = textList.getOrElse(0) { "" }.removeSuffix("Mbps Tx")
-		val textSecondLine = textList.getOrElse(1) { "" }.removeSuffix("Mbps Rx")
+		val textFirstLine: String
+		val textSecondLine: String
+
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+			textFirstLine = textList.getOrElse(0) { "" }.removeSuffix("Mbps Tx")
+			textSecondLine = textList.getOrElse(1) { "" }.removeSuffix("Mbps Rx")
+		} else {
+			textFirstLine = textList.getOrElse(0) { "" }.removeSuffix("Mbps")
+			textSecondLine = ""
+		}
 
 		val bitmap =
 			Bitmap.createBitmap(size.toInt(), size.toInt(), Bitmap.Config.ARGB_8888)
