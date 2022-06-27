@@ -110,7 +110,7 @@ class NotificationHolder(
 			isAntiAlias = true
 			color = Color.WHITE
 			// TODO: why 1.5? (density: ldpi=0.75, mdpi=1, hdpi=1.5, xhdpi=2)
-			textSize = size / 1.5F // two lines, three digits in each line
+			textSize = size / 1.5F - 3 // two lines, three digits in each line
 //			textSize = size / 2F // two lines, four digits in each line
 			textAlign = Paint.Align.RIGHT
 			typeface = Typeface.create("sans-serif-condensed", Typeface.BOLD)
