@@ -245,7 +245,6 @@ class MainActivity : Activity() {
 // TODO: create checkbox to "enable overlay" window and save it to sharedPrefs.
 // TODO: ask overlay permission only when "enable overlay" setting is checked and service is starting.
 //  If user not grant permission, uncheck "enable overlay" and start service without overlay window.
-// TODO: how to work with saved bundle state? Don't start service, when app is restored from resent
-//  app screen ("hot start"), only when "cold start" of app.
 // TODO: add "notification settings" button which launch system notification settings for app's
 //  foreground notification (not notification channel!).
+// TODO: fix frame drops on activity cold start
