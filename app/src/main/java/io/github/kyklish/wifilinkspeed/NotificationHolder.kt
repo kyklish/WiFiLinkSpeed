@@ -14,7 +14,7 @@ class NotificationHolder(
 	private val NOTIFICATION_ID: Int
 ) {
 	companion object {
-		private const val REQUEST_CODE = 0
+		private const val REQUEST_CODE = 1 // must not be 0 for working intent flags
 	}
 
 	val notification: Notification
@@ -54,7 +54,9 @@ class NotificationHolder(
 		notificationBuilder: Notification.Builder,
 		message: String
 	): Notification {
-		val contentIntent = Intent(context, MainActivity::class.java)
+		val contentIntent = Intent(context, MainActivity::class.java).apply {
+			flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
+		}
 		val contentPendingIntent = PendingIntent.getActivity(
 			context,
 			REQUEST_CODE,
