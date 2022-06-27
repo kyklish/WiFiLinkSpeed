@@ -8,6 +8,7 @@
 	<string name="alert_dialog_title">Screen Overlay Permission Needed</string>
 	<string name="button_service_start">Start Service</string>
 	<string name="button_service_stop">Stop Service</string>
+	<string name="no_connection">No connection</string>
 	<string name="notification_channel_id">FOREGROUND_SERVICE_ID</string>
 	<string name="notification_channel_name">Foreground Service Notification</string>
 	<string name="notification_description">Show notification to make permanent foreground service.</string>

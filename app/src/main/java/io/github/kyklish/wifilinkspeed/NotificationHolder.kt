@@ -78,10 +78,15 @@ class NotificationHolder(
 
 	// called, when 'message' text is changed (different than already in notification)
 	fun notify(message: String) {
-		val bitmap = createBitmapFromString(message)
-		val icon = Icon.createWithBitmap(bitmap)
-		notificationBuilder.setSmallIcon(icon)
-		notificationBuilder.setContentText(message)
+		if (message == getString(R.string.text_info)) {
+			notificationBuilder.setSmallIcon(R.drawable.ic_wifi_small_icon)
+			notificationBuilder.setContentText(getString(R.string.no_connection))
+		} else {
+			val bitmap = createBitmapFromString(message)
+			val icon = Icon.createWithBitmap(bitmap)
+			notificationBuilder.setSmallIcon(icon)
+			notificationBuilder.setContentText(message)
+		}
 		notificationManager.notify(NOTIFICATION_ID, notificationBuilder.build())
 	}
 
