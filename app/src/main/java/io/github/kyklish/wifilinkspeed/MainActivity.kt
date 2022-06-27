@@ -24,6 +24,8 @@ class MainActivity : Activity() {
 		const val GET_PERMISSION_OVERLAY_REQUEST = 0
 	}
 
+	private var isColdStart = false
+
 	private lateinit var textView: TextView
 	private lateinit var buttonView: Button
 
@@ -50,6 +52,7 @@ class MainActivity : Activity() {
 		// OR set flag in MainActivity.kt
 //		window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
 
+		isColdStart = true
 		textView = findViewById(R.id.textInfo)
 		setDefaultInfoText()
 		buttonView = findViewById(R.id.buttonService)
@@ -83,7 +86,15 @@ class MainActivity : Activity() {
 
 	override fun onStart() {
 		super.onStart()
-		startForegroundServiceAndBind(buttonView)
+		// "Cold Start" - start service automatically
+		// "Hot Start" - do not start service. It's prevent this scenario: if we stop service,
+		// switch to another app, and switch back, our app will start service, but we stopped it
+		// just moment ago, this behavior is annoying.
+		if (isColdStart) Utils.toast("Cold Start") else Utils.toast("Hot Start")
+		if (isColdStart) {
+			isColdStart = false
+			startForegroundServiceAndBind(buttonView)
+		}
 	}
 
 	override fun onStop() {
