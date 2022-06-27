@@ -52,6 +52,7 @@ class MainActivity : Activity() {
 		// OR set flag in MainActivity.kt
 //		window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
 
+		// onCreate() executes only during "Cold Start"
 		isColdStart = true
 		textView = findViewById(R.id.textInfo)
 		setDefaultInfoText()
