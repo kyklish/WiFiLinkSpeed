@@ -4,10 +4,7 @@ import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.ActivityManager
 import android.app.AlertDialog
-import android.content.ComponentName
-import android.content.Context
-import android.content.Intent
-import android.content.ServiceConnection
+import android.content.*
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
@@ -29,6 +26,9 @@ class MainActivity : Activity() {
 
 	private lateinit var textView: TextView
 	private lateinit var buttonView: Button
+	private lateinit var checkboxView: CheckBox
+
+	private lateinit var sharedPref: SharedPreferences
 
 	private var foregroundService: ForegroundService? = null
 
@@ -59,6 +59,11 @@ class MainActivity : Activity() {
 		setDefaultInfoText()
 		buttonView = findViewById(R.id.buttonService)
 		setButtonServiceText()
+		checkboxView = findViewById(R.id.checkBoxOverlay)
+		// [left] ?: [right] - elvis operator﻿, return [right] if [left] is null
+		sharedPref = this.getPreferences(Context.MODE_PRIVATE)
+		val savedCheckBox = sharedPref.getInt(getString(R.string.checkbox_overlay), 1)
+		checkboxView.isChecked = savedCheckBox.toBoolean()
 	}
 
 /*	Official Android documentation.
@@ -164,7 +169,7 @@ class MainActivity : Activity() {
 			val serviceIntent = Intent(this, ForegroundService::class.java)
 				.putExtra(
 					getString(R.string.service_extra_param_overlay),
-					findViewById<CheckBox>(R.id.checkBoxOverlay).isChecked
+					checkboxView.isChecked
 				)
 			applicationContext.startForegroundService(serviceIntent)
 		}
@@ -262,14 +267,24 @@ class MainActivity : Activity() {
 		}
 	}
 
-	fun toggleOverlay(checkBox: View) {
-		if ((checkBox as CheckBox).isChecked) {
+	fun toggleOverlay(checkbox: View) {
+		val isChecked = (checkbox as CheckBox).isChecked
+
+		if (isChecked) {
 			foregroundService?.createOverlay()
 			foregroundService?.updateUI(true)
 		} else {
 			foregroundService?.destroyOverlay()
 		}
+
+		with (sharedPref.edit()) {
+			putInt(getString(R.string.checkbox_overlay), isChecked.toInt())
+			apply()
+		}
 	}
+
+	private fun Boolean.toInt() = if (this) 1 else 0
+	private fun Int.toBoolean() = this != 0
 }
 // TODO: on permission request MainActivity leaks window. We need dialog.dismiss() in onPause() activity:
 //  android - Activity has leaked window that was originally added - Stack Overflow.rar
