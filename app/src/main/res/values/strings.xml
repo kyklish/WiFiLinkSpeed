@@ -20,6 +20,6 @@
 	<string name="text_speed">%1$d%2$s\n</string>
 	<string name="text_speed_tx_rx">%1$d%3$s Tx\n%2$d%3$s Rx</string>
 	<string name="button_notification_settings">Open Notification Settings</string>
-	<string name="checkbox_overlay">Overlay (restart service to apply)</string>
+	<string name="checkbox_overlay">Overlay</string>
 	<string name="service_extra_param_overlay">Overlay</string>
 </resources>

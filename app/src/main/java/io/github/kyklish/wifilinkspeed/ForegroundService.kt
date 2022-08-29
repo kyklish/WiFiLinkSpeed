@@ -54,6 +54,7 @@ class ForegroundService : Service() {
 //		updateUIbyTimer() // works fine, no problems
 		updateUIbyHandler() // more reliable by StackOverflow
 	}
+
 /*
 	override fun onCreate() {
 		super.onCreate()
@@ -75,13 +76,7 @@ class ForegroundService : Service() {
 		intent?.extras?.let {
 			val showOverlay = it.get(getString(R.string.service_extra_param_overlay)) as Boolean
 			if (showOverlay) {
-				if (BuildConfig.DEBUG) {
-					overlayWindowD = OverlayWindowByDraw(this, 40F, Color.RED).create()
-					overlayWindowL = OverlayWindowByLayout(this, 40F, Color.MAGENTA).create()
-				} else {
-//					overlayWindow = OverlayWindowByDraw(this, 10F, Color.YELLOW).create()
-					overlayWindow = OverlayWindowByLayout(this, 10F, Color.YELLOW).create()
-				}
+				createOverlay()
 			}
 		}
 	}
@@ -96,9 +91,7 @@ class ForegroundService : Service() {
 		handlerTask = null
 		handler = null
 
-		overlayWindowD?.remove()
-		overlayWindowL?.remove()
-		overlayWindow?.remove()
+		destroyOverlay()
 
 		// if flag set to true, notification previously provided to startForeground(int, Notification)
 		// will be removed automatically
@@ -161,7 +154,7 @@ class ForegroundService : Service() {
 		}
 	}
 
-	private fun updateUI(forceUpdate: Boolean = false) {
+	fun updateUI(forceUpdate: Boolean = false) {
 		val linkSpeedStr = wifiInfo.linkSpeedStr(this@ForegroundService)
 		// Timer or handler invoke 'updateUI()' before activity set 'callbackUpdateActivityText'.
 		// On first call 'callbackUpdateActivityText?.invoke()' is null and not invoked,
@@ -177,6 +170,26 @@ class ForegroundService : Service() {
 			overlayWindowL?.setText(linkSpeedStr) // OverlayWindow Debug
 			overlayWindow?.setText(linkSpeedStr) // OverlayWindow Release
 		}
+	}
+
+	fun createOverlay() {
+		if (BuildConfig.DEBUG) {
+			overlayWindowD = OverlayWindowByDraw(this, 40F, Color.RED).create()
+			overlayWindowL = OverlayWindowByLayout(this, 40F, Color.MAGENTA).create()
+		} else {
+//			overlayWindow = OverlayWindowByDraw(this, 10F, Color.YELLOW).create()
+			overlayWindow = OverlayWindowByLayout(this, 10F, Color.YELLOW).create()
+		}
+	}
+
+	fun destroyOverlay() {
+		overlayWindowD?.destroy()
+		overlayWindowL?.destroy()
+		overlayWindow?.destroy()
+
+		overlayWindowD = null
+		overlayWindowL = null
+		overlayWindow = null
 	}
 
 	fun registerCallbackForResults(callback: (String) -> Unit) {

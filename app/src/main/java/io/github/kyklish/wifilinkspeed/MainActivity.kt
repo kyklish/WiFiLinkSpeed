@@ -261,6 +261,15 @@ class MainActivity : Activity() {
 			startForegroundServiceAndBind(button as Button)
 		}
 	}
+
+	fun toggleOverlay(checkBox: View) {
+		if ((checkBox as CheckBox).isChecked) {
+			foregroundService?.createOverlay()
+			foregroundService?.updateUI(true)
+		} else {
+			foregroundService?.destroyOverlay()
+		}
+	}
 }
 // TODO: on permission request MainActivity leaks window. We need dialog.dismiss() in onPause() activity:
 //  android - Activity has leaked window that was originally added - Stack Overflow.rar

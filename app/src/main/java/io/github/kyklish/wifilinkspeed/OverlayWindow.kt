@@ -13,7 +13,7 @@ import android.widget.TextView
 
 interface OverlayWindow {
 	fun create(): OverlayWindow
-	fun remove()
+	fun destroy()
 	fun setText(text: String)
 }
 
@@ -52,7 +52,7 @@ abstract class OverlayWindowBase(context: Context, fontSizeSp: Float) : OverlayW
 		return this
 	}
 
-	override fun remove() {
+	override fun destroy() {
 		windowManager.removeView(view)
 	}
 
