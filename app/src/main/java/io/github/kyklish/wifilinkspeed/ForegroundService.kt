@@ -54,7 +54,7 @@ class ForegroundService : Service() {
 //		updateUIbyTimer() // works fine, no problems
 		updateUIbyHandler() // more reliable by StackOverflow
 	}
-
+/*
 	override fun onCreate() {
 		super.onCreate()
 		if (BuildConfig.DEBUG) {
@@ -63,6 +63,26 @@ class ForegroundService : Service() {
 		} else {
 //			overlayWindow = OverlayWindowByDraw(this, 10F, Color.YELLOW).create()
 			overlayWindow = OverlayWindowByLayout(this, 10F, Color.YELLOW).create()
+		}
+	}
+*/
+	// Add checkbox to enable/disable overlay and pass parameter for service via putExtra().
+	// Copy code from onCreate() to onStart(), because only onStart() has [intent] param, which
+	// contain [extra] params for service.
+	@Suppress("DEPRECATION")
+	override fun onStart(intent: Intent?, startId: Int) {
+		super.onStart(intent, startId)
+		intent?.extras?.let {
+			val showOverlay = it.get(getString(R.string.service_extra_param_overlay)) as Boolean
+			if (showOverlay) {
+				if (BuildConfig.DEBUG) {
+					overlayWindowD = OverlayWindowByDraw(this, 40F, Color.RED).create()
+					overlayWindowL = OverlayWindowByLayout(this, 40F, Color.MAGENTA).create()
+				} else {
+//					overlayWindow = OverlayWindowByDraw(this, 10F, Color.YELLOW).create()
+					overlayWindow = OverlayWindowByLayout(this, 10F, Color.YELLOW).create()
+				}
+			}
 		}
 	}
 

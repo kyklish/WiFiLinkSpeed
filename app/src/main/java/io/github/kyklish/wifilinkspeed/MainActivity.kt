@@ -15,6 +15,7 @@ import android.os.IBinder
 import android.provider.Settings
 import android.view.View
 import android.widget.Button
+import android.widget.CheckBox
 import android.widget.TextView
 import io.github.kyklish.wifilinkspeed.Utils.Companion.setTextView
 
@@ -161,6 +162,10 @@ class MainActivity : Activity() {
 			buttonView?.text = getString(R.string.button_service_stop)
 			// startForegroundService() will trigger onStartCommand() in service.
 			val serviceIntent = Intent(this, ForegroundService::class.java)
+				.putExtra(
+					getString(R.string.service_extra_param_overlay),
+					findViewById<CheckBox>(R.id.checkBoxOverlay).isChecked
+				)
 			applicationContext.startForegroundService(serviceIntent)
 		}
 
