@@ -190,14 +190,6 @@ class MainActivity : Activity() {
 		}
 	}
 
-	fun toggleService(button: View) {
-		if (foregroundServiceRunning()) {
-			stopForegroundServiceAndUnbind(button as Button)
-		} else {
-			startForegroundServiceAndBind(button as Button)
-		}
-	}
-
 	private fun setDefaultInfoText() {
 		textView.text = getString(R.string.text_info)
 	}
@@ -238,6 +230,14 @@ class MainActivity : Activity() {
 			}
 			.create()
 		dialog.show()
+	}
+
+	fun toggleService(button: View) {
+		if (foregroundServiceRunning()) {
+			stopForegroundServiceAndUnbind(button as Button)
+		} else {
+			startForegroundServiceAndBind(button as Button)
+		}
 	}
 }
 // TODO: on permission request MainActivity leaks window. We need dialog.dismiss() in onPause() activity:
