@@ -31,5 +31,12 @@
 			android:onClick="toggleService"
 			tools:text="Button" />
 
+		<Button
+			android:id="@+id/buttonNotificationSettings"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:onClick="openNotificationSettings"
+			android:text="@string/button_notification_settings" />
+
 	</LinearLayout>
 </ScrollView>

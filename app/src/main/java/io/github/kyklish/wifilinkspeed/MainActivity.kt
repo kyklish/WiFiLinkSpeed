@@ -232,6 +232,23 @@ class MainActivity : Activity() {
 		dialog.show()
 	}
 
+	@Suppress("UNUSED_PARAMETER")
+	fun openNotificationSettings(button: View) {
+		// NOTIFICATION SETTINGS
+		val settingsIntent = Intent(Settings.ACTION_APP_NOTIFICATION_SETTINGS)
+			.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+			.putExtra(Settings.EXTRA_APP_PACKAGE, packageName)
+
+		// ALL IS CORRECT BUT NOT WORK :(
+		// CHANNEL NOTIFICATION SETTINGS
+//		val settingsIntent = Intent(Settings.ACTION_CHANNEL_NOTIFICATION_SETTINGS)
+//			.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+//			.putExtra(Settings.EXTRA_APP_PACKAGE, packageName)
+//			.putExtra(Settings.EXTRA_CHANNEL_ID, R.string.notification_channel_id)
+
+		startActivity(settingsIntent)
+	}
+
 	fun toggleService(button: View) {
 		if (foregroundServiceRunning()) {
 			stopForegroundServiceAndUnbind(button as Button)
