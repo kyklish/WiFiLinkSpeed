@@ -87,15 +87,17 @@ class MainActivity : Activity() {
 
 	override fun onStart() {
 		super.onStart()
-		// "Cold Start" - start service automatically
-		// "Hot Start" - do not start service. It's prevent this scenario: if we stop service,
-		// switch to another app, and switch back, our app will start service, but we stopped it
-		// just moment ago, this behavior is annoying.
-		if (isColdStart) Utils.toast("Cold Start") else Utils.toast("Hot Start")
+		// "Cold Start" - always start service.
+		// "Hot Start" - do not start service, just bind to it if service is running.
+		// It's prevent this scenario: if we stop service, switch to another app, and switch back,
+		// our app will start service, but we stopped it just moment ago, this behavior is annoying.
+//		if (isColdStart) Utils.toast("Cold Start") else Utils.toast("Hot Start")
 		if (isColdStart) {
 			isColdStart = false
 			startForegroundServiceAndBind(buttonView)
-		}
+		} else
+			if (foregroundServiceRunning())
+				startForegroundServiceAndBind(buttonView)
 	}
 
 	override fun onStop() {
