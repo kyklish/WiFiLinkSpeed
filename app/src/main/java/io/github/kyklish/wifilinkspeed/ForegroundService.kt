@@ -135,6 +135,7 @@ class ForegroundService : Service() {
 				handler?.postDelayed(this, PERIOD)
 			}
 		}
+		// Run task once, it will re-schedule itself
 		handlerTask?.let {
 			handler?.post(it)
 		}
